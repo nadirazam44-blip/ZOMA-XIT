@@ -26,19 +26,26 @@ jobs:
       - name: Extract project ZIP
         run: unzip -o ZOMA_XIT_START_HERE.zip -d src
 
-      - name: Fix Java and Kotlin targets
+      - name: Set Android Java and Kotlin targets to 17
         run: |
           cat >> src/app/build.gradle.kts <<'EOF'
 
-          tasks.withType<JavaCompile>().configureEach {
-              sourceCompatibility = "17"
-              targetCompatibility = "17"
+          android {
+              compileOptions {
+                  sourceCompatibility = JavaVersion.VERSION_17
+                  targetCompatibility = JavaVersion.VERSION_17
+              }
           }
 
           tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
               kotlinOptions.jvmTarget = "17"
           }
           EOF
+
+      - name: Verify target settings
+        working-directory: src
+        run: |
+          grep -n -A 5 -B 2 "compileOptions" app/build.gradle.kts
 
       - name: Build APK
         working-directory: src
