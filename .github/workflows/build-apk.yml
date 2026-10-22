@@ -1,4 +1,3 @@
-
 name: Build ZOMA XIT APK
 
 on:
@@ -25,6 +24,11 @@ jobs:
 
       - name: Extract project ZIP
         run: unzip -o ZOMA_XIT_START_HERE.zip -d src
+
+      - name: Use new MainActivity
+        run: |
+          mkdir -p src/app/src/main/java/com/zomaxit/app
+          cp app/src/main/java/com/zomaxit/app/MainActivity.kt src/app/src/main/java/com/zomaxit/app/MainActivity.kt
 
       - name: Set Android Java and Kotlin targets to 17
         run: |
